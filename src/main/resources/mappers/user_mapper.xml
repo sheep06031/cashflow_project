@@ -6,7 +6,7 @@
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
         insert into
             user_tb
-        values (0, #{username}, #{password}, #{email}, now(), null)
+        values (0, #{username}, #{password}, #{email}, 0, now(), null)
     </insert>
 
     <select id="getUserByUserId">
@@ -17,4 +17,22 @@
         where
             user_id = #{userId}
     </select>
+
+    <select id="getUserByUsername">
+        select
+            *
+        from
+            user_tb
+        where
+            username = #{username}
+    </select>
+    <update id="changePassword">
+        update
+            user_tb
+        set
+            password = #{user.password},
+            update_dt = now()
+        where
+            user_id = #{userId}
+    </update>
 </mapper>

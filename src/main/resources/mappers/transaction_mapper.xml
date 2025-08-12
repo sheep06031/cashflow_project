@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cashflow.mapper.TransactionMapper">
+    <insert id="addTransaction" useGeneratedKeys="true" keyProperty="transactionId">
+        insert into
+            transaction_tb
+        values (0, #{userId}, #{transactionDt}, #{cost}, #{spendingType}, #{description})
+    </insert>
+    <select id="getTransactionListByUserId">
+        select
+            *
+        from
+            transaction_tb
+        where
+            user_id = #{userId}
+        order by
+            transaction_dt DESC
+    </select>
+
+</mapper>

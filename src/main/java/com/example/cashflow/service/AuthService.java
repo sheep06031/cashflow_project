@@ -1,6 +1,7 @@
 package com.example.cashflow.service;
 
 import com.example.cashflow.Entity.User;
+import com.example.cashflow.dto.auth.SigninReqDto;
 import com.example.cashflow.dto.ApiRespDto;
 import com.example.cashflow.dto.auth.SignupReqDto;
 import com.example.cashflow.repository.UserRepository;
@@ -35,5 +36,23 @@ public class AuthService {
         } catch (Exception e) {
             return new ApiRespDto<>("failed", "Error occurred during sign up", e.getMessage());
         }
+    }
+
+    public ApiRespDto<?> signin(SigninReqDto signinReqDto) {
+        Optional<User> optionalUser = userRepository.getUserByUsername(signinReqDto.getUsername());
+        if(optionalUser.isEmpty()) {
+            return new ApiRespDto<>("failed", "Incorrect username or password.", null);
+        }
+
+        User user = optionalUser.get();
+
+
+        if(!bCryptPasswordEncoder.matches(signinReqDto.getPassword(), user.getPassword())) {
+            return new ApiRespDto<>("failed", "Incorrect username or password", null);
+        }
+
+        String accessToken = jwtUtils.generateAccessToken(user.getUserId().toString());
+        return new ApiRespDto<>("success", "Login successful", accessToken);
+
     }
 }

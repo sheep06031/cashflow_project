@@ -1,6 +1,7 @@
 package com.example.cashflow.controller.auth;
 
 
+import com.example.cashflow.dto.auth.SigninReqDto;
 import com.example.cashflow.dto.auth.SignupReqDto;
 import com.example.cashflow.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupReqDto signupReqDto) {
         return ResponseEntity.ok(authService.signup(signupReqDto));
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> singin(@RequestBody SigninReqDto signinReqDto) {
+        return ResponseEntity.ok(authService.signin(signinReqDto));
     }
 }

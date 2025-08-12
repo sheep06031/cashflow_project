@@ -26,4 +26,12 @@ public class UserRepository {
     public Optional<User> getUserByUserId(Integer userId) {
         return userMapper.getUserByUserId(userId);
     }
+
+    public Optional<User> getUserByUsername(String username) {
+        return userMapper.getUserByUsername(username);
+    }
+
+    public int changePassword(Integer userId,User user) {
+        return userMapper.changePassword(userId, user);
+    }
 }

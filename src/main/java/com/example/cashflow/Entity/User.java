@@ -19,6 +19,7 @@ public class User {
     private String password;
     @JsonIgnore
     private String email;
+    private Integer details;
     private LocalDateTime createDt;
     private LocalDateTime updateDt;
 

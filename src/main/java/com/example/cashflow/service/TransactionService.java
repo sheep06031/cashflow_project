@@ -56,6 +56,7 @@ public class TransactionService {
 
     @Transactional
     public ApiRespDto<?> removeTransactionByTransactionId(Integer transactionId, PrincipalUser principalUser) {
+        //not finish
         Optional<User> optionalUser = userRepository.getUserByUserId(principalUser.getUserId());
         Optional<Transaction> optionalTransaction = transactionRepository.getTransactionByTransactionId(transactionId);
         if(optionalTransaction.isEmpty()) {

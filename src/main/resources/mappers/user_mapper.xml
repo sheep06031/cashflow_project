@@ -26,6 +26,14 @@
         where
             username = #{username}
     </select>
+    <select id="getUserByEmail">
+        select
+            *
+        from
+            user_tb
+        where
+            email = #{email}
+    </select>
     <update id="changePassword">
         update
             user_tb

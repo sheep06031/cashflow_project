@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class TransactionRepository {
@@ -15,6 +16,10 @@ public class TransactionRepository {
     public int addTransaction(Transaction transaction) {
         return  transactionMapper.addTransaction(transaction);
     }
+    public Optional<Transaction> getTransactionByTransactionId(Integer transactionId) {
+        return transactionMapper.getTransactionByTransactionId(transactionId);
+    }
+    public int removeTransactionByTransactionId(Integer transactionId) { return  transactionMapper.removeTransactionByTransactionId(transactionId);}
 
     public List<Transaction> getTransactionByUserId(Integer userId) {
         return transactionMapper.getTransactionListByUserId(userId);

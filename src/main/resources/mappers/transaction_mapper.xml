@@ -8,6 +8,20 @@
             transaction_tb
         values (0, #{userId}, #{transactionDt}, #{cost}, #{spendingType}, #{description})
     </insert>
+    <select id="getTransactionByTransactionId">
+        select
+            *
+        from
+            transaction_tb
+        where
+            transaction_id = #{transactionId}
+    </select>
+    <delete id="removeTransactionByTransactionId">
+        delete from
+            transaction_tb
+        where
+            transaction_id = #{transactionId}
+    </delete>
     <select id="getTransactionListByUserId">
         select
             *

@@ -50,7 +50,7 @@ public class SecurityConfig {
         http.addFilterBefore(jwtAuthenticatonFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/auth/**").permitAll();
+            auth.requestMatchers("/auth/**", "/chatgpt/**").permitAll();
             auth.anyRequest().authenticated();
         });
 

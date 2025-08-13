@@ -12,7 +12,7 @@ public interface UserMapper {
     int addUser(User user);
     Optional<User> getUserByUserId(Integer userId);
     Optional<User> getUserByUsername(String username);
-    //int changePassword(Integer userId, User user);
+    Optional<User> getUserByEmail(String email);
     int changePassword(@Param("userId") Integer userId, @Param("user") User user);
 
 }

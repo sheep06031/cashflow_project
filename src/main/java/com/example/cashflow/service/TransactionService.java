@@ -47,8 +47,28 @@ public class TransactionService {
 
         try {
             int result = transactionRepository.addTransaction(addTransactionReqDto.toEntity(principalUser.getUserId()));
-            if(result != 1) return new ApiRespDto<>("failed", "Failed to add Transaciton", null);
+            if(result != 1) return new ApiRespDto<>("failed", "Failed to add Transaction", null);
             return new ApiRespDto<>("success", "Transaction added successfully", null);
+        } catch (Exception e) {
+            return  new ApiRespDto<>("failed", "Failed to add transaction due to a server error" + e.getMessage(), null);
+        }
+    }
+
+    @Transactional
+    public ApiRespDto<?> removeTransactionByTransactionId(Integer transactionId, PrincipalUser principalUser) {
+        Optional<User> optionalUser = userRepository.getUserByUserId(principalUser.getUserId());
+        Optional<Transaction> optionalTransaction = transactionRepository.getTransactionByTransactionId(transactionId);
+        if(optionalTransaction.isEmpty()) {
+            return new ApiRespDto<>("failed", "Failed to find a transaction", null);
+        }
+        if(optionalUser.isEmpty() || !(optionalTransaction.get().getUserId().equals(principalUser.getUserId()))) {
+            return new ApiRespDto<>("failed", "Invalid Access", null);
+        }
+
+        try {
+            int result = transactionRepository.removeTransactionByTransactionId(transactionId);
+            if(result != 1) return new ApiRespDto<>("failed", "Failed to remove Transaction", null);
+            return new ApiRespDto<>("success", "Transaction removed successfully", null);
         } catch (Exception e) {
             return  new ApiRespDto<>("failed", "Failed to add transaction due to a server error" + e.getMessage(), null);
         }

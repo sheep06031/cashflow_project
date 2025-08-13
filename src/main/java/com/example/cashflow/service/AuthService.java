@@ -27,11 +27,21 @@ public class AuthService {
 
     @Transactional(rollbackFor = Exception.class)
     public ApiRespDto<?> signup(SignupReqDto signupReqDto) {
+        Optional<User> usernameUser = userRepository.getUserByUsername(signupReqDto.getUsername());
+        Optional<User> emailUser = userRepository.getUserByEmail(signupReqDto.getEmail());
+        if(usernameUser.isPresent()) {
+            return new ApiRespDto<>("failed", "This username is already taken", null);
+        }
+        if(emailUser.isPresent()) {
+            return new ApiRespDto<>("failed", "This email is already taken", null);
+        }
 
         try {
             Optional<User> optionalUser = userRepository.addUser(signupReqDto.toEntity(bCryptPasswordEncoder));
             if(optionalUser.isEmpty()) throw new RuntimeException("Unable to add user");
             User user = optionalUser.get();
+
+
             return new ApiRespDto<>("success", "Registration Completed", user);
         } catch (Exception e) {
             return new ApiRespDto<>("failed", "Error occurred during sign up", e.getMessage());

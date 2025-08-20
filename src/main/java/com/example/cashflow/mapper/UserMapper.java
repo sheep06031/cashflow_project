@@ -15,4 +15,5 @@ public interface UserMapper {
     Optional<User> getUserByEmail(String email);
     int changePassword(@Param("userId") Integer userId, @Param("user") User user);
 
+
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cashflow.mapper.TempUserMapper">
+    <insert id="addTempUser">
+        insert into
+            temp_tb
+        values (#{tempEmail}, #{code})
+    </insert>
+    <select id="getTempUserByEmail">
+        select
+            *
+        from
+            temp_tb
+        where
+            temp_email = #{tempEmail}
+    </select>
+    <update id="updateCodeByEmail">
+        update
+            temp_tb
+        set
+            temp_code = #{code}
+        where
+            temp_email = #{tempEmail}
+    </update>
+    <delete id="deleteTempUserByEmail">
+        delete from temp_tb
+        where temp_email =#{tempEmail}
+    </delete>
+</mapper>

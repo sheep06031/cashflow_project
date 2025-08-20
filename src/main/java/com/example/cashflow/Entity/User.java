@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 
 
 @Data
@@ -20,6 +22,7 @@ public class User {
     @JsonIgnore
     private String email;
     private Integer details;
+    private HashMap<String, String> info;
     private LocalDateTime createDt;
     private LocalDateTime updateDt;
 

@@ -6,7 +6,7 @@
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
         insert into
             user_tb
-        values (0, #{username}, #{password}, #{email}, 0, now(), null)
+        values (0, #{username}, #{email}, #{password}, 0, now(), null)
     </insert>
 
     <select id="getUserByUserId">

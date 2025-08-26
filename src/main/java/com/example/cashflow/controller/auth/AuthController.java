@@ -1,13 +1,14 @@
 package com.example.cashflow.controller.auth;
 
 
+import com.example.cashflow.dto.ApiRespDto;
 import com.example.cashflow.dto.auth.SigninReqDto;
 import com.example.cashflow.dto.auth.SignupReqDto;
 import com.example.cashflow.security.model.PrincipalUser;
 import com.example.cashflow.service.AuthService;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +28,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.signin(signinReqDto));
     }
 
-//    @GetMapping("/principal")
-//    public ResponseEntity<?> getPrincipal() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
-//        return ResponseEntity.ok(principalUser);
-//    }
+    @GetMapping("/principal")
+    public ResponseEntity<?> getPrincipal() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
+        ApiRespDto<?> apiRespDto = new ApiRespDto<>("success", "", principalUser);
+        return  ResponseEntity.ok(apiRespDto);
+    }
 }

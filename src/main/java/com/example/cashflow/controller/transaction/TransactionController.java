@@ -24,7 +24,7 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.removeTransactionByTransactionId(transactionId, principalUser));
     }
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     public ResponseEntity<?> getTransactionByUserId(@AuthenticationPrincipal PrincipalUser principalUser) {
         return ResponseEntity.ok(transactionService.getTransactionListByUserId(principalUser));
     }

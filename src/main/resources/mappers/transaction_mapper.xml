@@ -6,7 +6,7 @@
     <insert id="addTransaction" useGeneratedKeys="true" keyProperty="transactionId">
         insert into
             transaction_tb
-        values (0, #{userId}, #{transactionDt}, #{cost}, #{spendingType}, #{description})
+        values (0, #{userId}, #{transactionDt}, #{cost}, #{spendingType}, #{category}, #{description})
     </insert>
     <select id="getTransactionByTransactionId">
         select
@@ -32,5 +32,17 @@
         order by
             transaction_dt DESC
     </select>
+    <update id="updateTransactionByTransactionId">
+        update
+            transaction_tb
+        set
+            transaction_dt = #{transactionDt},
+            cost = #{cost},
+            spending_type = #{spendingType},
+            category = #{category},
+            description = #{description}
+        where
+            transaction_id = #{transactionId}
+    </update>
 
 </mapper>

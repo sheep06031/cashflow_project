@@ -4,6 +4,7 @@ import com.example.cashflow.Entity.Transaction;
 import com.example.cashflow.Entity.User;
 import com.example.cashflow.dto.ApiRespDto;
 import com.example.cashflow.dto.transaction.AddTransactionReqDto;
+import com.example.cashflow.dto.transaction.UpdateTransactionReqDto;
 import com.example.cashflow.repository.TransactionRepository;
 import com.example.cashflow.repository.UserRepository;
 import com.example.cashflow.security.model.PrincipalUser;
@@ -29,22 +30,6 @@ public class TransactionService {
             return new ApiRespDto<>("failed", "Invalid access. Your login information is invalid or you do not have permission", null);
         }
 
-        if (addTransactionReqDto.getTransactionDt() == null) {
-            return new ApiRespDto<>("failed", "Transaction date is required.", null);
-        }
-
-        if (addTransactionReqDto.getCost() == null) {
-            return new ApiRespDto<>("failed", "Cost is required.", null);
-        }
-
-        if (addTransactionReqDto.getSpendingType() == null || addTransactionReqDto.getSpendingType().isBlank()) {
-            return new ApiRespDto<>("failed", "Spending type is required.", null);
-        }
-
-        if (addTransactionReqDto.getDescription() == null || addTransactionReqDto.getDescription().isBlank()) {
-            return new ApiRespDto<>("failed", "Description is required.", null);
-        }
-
         try {
             int result = transactionRepository.addTransaction(addTransactionReqDto.toEntity(principalUser.getUserId()));
             if(result != 1) return new ApiRespDto<>("failed", "Failed to add Transaction", null);
@@ -56,7 +41,6 @@ public class TransactionService {
 
     @Transactional
     public ApiRespDto<?> removeTransactionByTransactionId(Integer transactionId, PrincipalUser principalUser) {
-        //not finish
         Optional<User> optionalUser = userRepository.getUserByUserId(principalUser.getUserId());
         Optional<Transaction> optionalTransaction = transactionRepository.getTransactionByTransactionId(transactionId);
         if(optionalTransaction.isEmpty()) {
@@ -96,8 +80,33 @@ public class TransactionService {
         } catch (Exception e) {
             return new ApiRespDto<>("failed", "An error has occurred" + e.getMessage(), null);
         }
+    }
+    @Transactional
+    public ApiRespDto<?> updateTransactionByTransactionId(UpdateTransactionReqDto updateTransactionReqDto, PrincipalUser principalUser) {
+        Optional<Transaction> optionalTransaction = transactionRepository.getTransactionByTransactionId(updateTransactionReqDto.getTransactionId());
+        if (optionalTransaction.isEmpty()) {
+            return new ApiRespDto<>("failed", "There is no transaction to update", null);
+        }
+        if (!optionalTransaction.get().getUserId().equals(principalUser.getUserId())) {
+            return new ApiRespDto<>("failed", "Invalid access", null);
+        }
+        Transaction transaction = optionalTransaction.get();
 
+        Transaction newTransaction = transaction.builder()
+                .transactionId(transaction.getTransactionId())
+                .transactionDt(updateTransactionReqDto.getTransactionDt())
+                .cost(updateTransactionReqDto.getCost())
+                .spendingType(updateTransactionReqDto.getSpendingType())
+                .category(updateTransactionReqDto.getCategory())
+                .description(updateTransactionReqDto.getDescription())
+                .build();
 
-
+        try {
+            int result = transactionRepository.updateTransactionByTransactionId(newTransaction);
+            if(result != 1) return new ApiRespDto<>("failed", "failed to update transaction", null);
+            return new ApiRespDto<>("success", "Update transaction complete", null);
+        } catch (Exception e) {
+            return new ApiRespDto<>("failed", "failed due to server issue" + e.getMessage(), null);
+        }
     }
 }

@@ -15,4 +15,6 @@ public interface TransactionMapper {
     int removeTransactionByTransactionId(Integer transactionId);
 
     List<Transaction> getTransactionListByUserId(Integer userId);
+
+    int updateTransactionByTransactionId(Transaction transaction);
 }

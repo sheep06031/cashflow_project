@@ -24,4 +24,8 @@ public class TransactionRepository {
     public List<Transaction> getTransactionByUserId(Integer userId) {
         return transactionMapper.getTransactionListByUserId(userId);
     }
+
+    public int updateTransactionByTransactionId(Transaction transaction) {
+        return transactionMapper.updateTransactionByTransactionId(transaction);
+    }
 }

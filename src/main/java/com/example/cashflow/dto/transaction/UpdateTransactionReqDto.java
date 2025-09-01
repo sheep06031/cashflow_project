@@ -1,15 +1,15 @@
-package com.example.cashflow.Entity;
+package com.example.cashflow.dto.transaction;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
-@Builder
-public class Transaction {
+@AllArgsConstructor
+public class UpdateTransactionReqDto {
     private Integer transactionId;
-    private Integer userId;
     private LocalDate transactionDt;
     private float cost;
     private String spendingType;

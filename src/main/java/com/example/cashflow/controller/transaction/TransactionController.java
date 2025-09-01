@@ -1,6 +1,7 @@
 package com.example.cashflow.controller.transaction;
 
 import com.example.cashflow.dto.transaction.AddTransactionReqDto;
+import com.example.cashflow.dto.transaction.UpdateTransactionReqDto;
 import com.example.cashflow.security.model.PrincipalUser;
 import com.example.cashflow.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,4 +29,10 @@ public class TransactionController {
     public ResponseEntity<?> getTransactionByUserId(@AuthenticationPrincipal PrincipalUser principalUser) {
         return ResponseEntity.ok(transactionService.getTransactionListByUserId(principalUser));
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateTransactionByTransactionId(@RequestBody UpdateTransactionReqDto updateTransactionReqDto, @AuthenticationPrincipal PrincipalUser principalUser) {
+        return ResponseEntity.ok(transactionService.updateTransactionByTransactionId(updateTransactionReqDto, principalUser));
+    }
+
 }

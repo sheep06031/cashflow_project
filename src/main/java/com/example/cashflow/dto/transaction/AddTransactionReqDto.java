@@ -12,9 +12,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AddTransactionReqDto {
     private LocalDate transactionDt;
-    private Integer cost;
+    private float cost;
     private String spendingType;
     private String description;
+    private String category;
 
     public Transaction toEntity(Integer userId) {
         return Transaction.builder()
@@ -22,6 +23,7 @@ public class AddTransactionReqDto {
                 .transactionDt(transactionDt)
                 .cost(cost)
                 .spendingType(spendingType)
+                .category(category)
                 .description(description)
                 .build();
     }

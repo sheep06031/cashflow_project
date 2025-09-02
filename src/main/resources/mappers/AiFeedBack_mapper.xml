@@ -34,4 +34,12 @@
         where
             user_id = #{userId} AND date= #{date}
     </select>
+    <select id="getFeedbackListByUserId">
+        select
+            *
+        from
+            feedback_tb
+        where
+            user_id = #{userId}
+    </select>
 </mapper>

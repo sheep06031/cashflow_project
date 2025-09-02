@@ -1,9 +1,12 @@
 package com.example.cashflow.service;
 
 import com.example.cashflow.Entity.AiFeedBack;
+import com.example.cashflow.Entity.Transaction;
+import com.example.cashflow.Entity.User;
 import com.example.cashflow.dto.AiFeedBack.AiFeedBackReqDto;
 import com.example.cashflow.dto.ApiRespDto;
 import com.example.cashflow.repository.AiFeedbackRepository;
+import com.example.cashflow.repository.UserRepository;
 import com.example.cashflow.security.model.PrincipalUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ public class GptService {
 
     @Autowired
     private AiFeedbackRepository aiFeedbackRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -166,6 +172,29 @@ public class GptService {
                         "korean", feedBack.getFeedbackKr(),
                         "count", 3 - feedBack.getCount()
                 ));
+            }
+        } catch (Exception e) {
+            return new ApiRespDto<>("failed", "An error has occurred" + e.getMessage(), null);
+        }
+    }
+
+    public ApiRespDto<?> getFeedbackListByUserId(PrincipalUser principalUser) {
+        if (principalUser == null || principalUser.getUserId() == null) {
+            return new ApiRespDto<>("failed", "Invalid access. Please log in again", null);
+        }
+
+        Optional<User> user = userRepository.getUserByUserId(principalUser.getUserId());
+        if (user.isEmpty()) {
+            return new ApiRespDto<>("failed", "User not found", null);
+        }
+
+        List<AiFeedBack> feedbackList = aiFeedbackRepository.getFeedbackListByUserId(principalUser.getUserId());
+
+        try {
+            if (feedbackList.isEmpty()) {
+                return new ApiRespDto<>("failed", "No Feedback found", null);
+            } else {
+                return new ApiRespDto<>("success", "Feedbacks retrieved successfully", feedbackList);
             }
         } catch (Exception e) {
             return new ApiRespDto<>("failed", "An error has occurred" + e.getMessage(), null);

@@ -6,6 +6,7 @@ import com.example.cashflow.Entity.Transaction;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -14,5 +15,6 @@ public interface AiFeedBackMapper {
     Optional<AiFeedBack> getAiFeedbackByUserIdAndDate(Integer userId, LocalDate date);
     int updateAiFeedback(AiFeedBack aiFeedBack);
     Optional<AiFeedBack> getFeedbackByUserIdAndDate(Integer userId, LocalDate date);
+    List<AiFeedBack> getFeedbackListByUserId(Integer userId);
 }
 

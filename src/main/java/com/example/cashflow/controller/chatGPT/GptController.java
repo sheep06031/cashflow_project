@@ -26,4 +26,9 @@ public class GptController {
     public ResponseEntity<?> getFeedback(@AuthenticationPrincipal PrincipalUser principalUser, String date) {
         return ResponseEntity.ok(gptService.getFeedbackByUserIdAndDate(principalUser, date));
     }
+
+    @GetMapping("/feedback/list")
+    public ResponseEntity<?> getFeedbackList(@AuthenticationPrincipal PrincipalUser principalUser) {
+        return ResponseEntity.ok(gptService.getFeedbackListByUserId(principalUser));
+    }
 }

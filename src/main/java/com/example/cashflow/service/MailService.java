@@ -45,7 +45,7 @@ public class MailService {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-
+            helper.setFrom("cash-flow@juyeop.com");
             helper.setTo(tempEmail);
             helper.setSubject("Email Verification for CashFlow");
             String htmlContent =

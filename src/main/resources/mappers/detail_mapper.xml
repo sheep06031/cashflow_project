@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cashflow.mapper.DetailMapper">
+    <insert id="addDetail">
+        insert into
+            detail_tb
+        values (#{userId}, #{firstname}, #{lastname}, #{birthday})
+    </insert>
+    <update id="updateDetail">
+        update
+            detail_tb
+        set
+            firstname = #{firstname},
+            lastname = #{lastname},
+            birthday = #{birthday}
+        where
+            user_id = #{userId}
+    </update>
+    <select id="getDetailByUserId">
+        select
+            *
+        from
+            detail_tb
+        where
+            user_id = #{userId}
+    </select>
+</mapper>

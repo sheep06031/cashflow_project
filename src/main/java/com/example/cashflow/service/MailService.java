@@ -1,23 +1,21 @@
 package com.example.cashflow.service;
 
-import com.example.cashflow.Entity.TempUser;
-import com.example.cashflow.Entity.User;
+
 import com.example.cashflow.dto.ApiRespDto;
 import com.example.cashflow.dto.auth.SignupReqDto;
-import com.example.cashflow.repository.TempUserRepository;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.MessagingException;
 
 
 import java.security.SecureRandom;
-import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class MailService {
@@ -30,7 +28,7 @@ public class MailService {
     private JavaMailSender javaMailSender;
 
     @Autowired
-    private TempUserRepository tempUserRepository;
+    private StringRedisTemplate redisTemplate;
 
     @Transactional(rollbackFor = Exception.class)
     public ApiRespDto<?> sendMailAndAddTempUser(SignupReqDto signupReqDto) {
@@ -40,7 +38,6 @@ public class MailService {
         }
         String tempEmail = signupReqDto.getEmail();
         String code = generateCode();
-        TempUser tempUser = new TempUser(tempEmail, code);
 
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -80,23 +77,13 @@ public class MailService {
 
 
             helper.setText(htmlContent, true);
-
-            Optional<TempUser> optionalTempUserByEmail = tempUserRepository.getTempUserByEmail(tempEmail);
-            if (optionalTempUserByEmail.isPresent()) {
-                int resultUpdateCode = tempUserRepository.updateCodeByEmail(tempEmail, code);
-                if (resultUpdateCode != 1) return new ApiRespDto<>("failed", "Failed to update new code", null);
-                javaMailSender.send(mimeMessage);
-                return new ApiRespDto<>("success", "Update New Code successfully", null);
-            }
-
-            int resultAddTempUser = tempUserRepository.addTempUser(tempUser);
-            if(resultAddTempUser != 1) return new ApiRespDto<>("failed", "Failed to add temporary User", null);
+            redisTemplate.opsForValue().set("auth:" + tempEmail, code, 5, TimeUnit.MINUTES);
 
             javaMailSender.send(mimeMessage);
-            return new ApiRespDto<>("success", "Temporary User added and mail sent successfully", null);
-        } catch (Exception e) {
+            return new ApiRespDto<>("success", "Verification mail sent successfully", null);
+        } catch (MessagingException e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return  new ApiRespDto<>("failed", "Failed to add temporary user due to a server error" + e.getMessage(), null);
+            return new ApiRespDto<>("failed", "Mail sending failed: " + e.getMessage(), null);
         }
     }
 

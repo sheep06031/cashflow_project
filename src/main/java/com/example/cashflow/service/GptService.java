@@ -1,7 +1,6 @@
 package com.example.cashflow.service;
 
 import com.example.cashflow.Entity.AiFeedBack;
-import com.example.cashflow.Entity.Transaction;
 import com.example.cashflow.Entity.User;
 import com.example.cashflow.dto.AiFeedBack.AiFeedBackReqDto;
 import com.example.cashflow.dto.ApiRespDto;
